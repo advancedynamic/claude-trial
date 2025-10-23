@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle != null ? pageTitle + ' - Secure App' : 'Secure App'}">Secure App</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a th:href="@{/dashboard}" class="text-2xl font-bold text-primary-600">
+                            Secure App
+                        </a>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-4" sec:authorize="isAuthenticated()">
+                        <a th:href="@{/dashboard}"
+                           class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 hover:border-primary-600 border-b-2 border-transparent transition">
+                            Dashboard
+                        </a>
+                        <a th:href="@{/users}" sec:authorize="hasAnyRole('ADMIN', 'USER_MANAGER')"
+                           class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 hover:border-primary-600 border-b-2 border-transparent transition">
+                            Users
+                        </a>
+                        <a th:href="@{/roles}" sec:authorize="hasRole('ADMIN')"
+                           class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 hover:border-primary-600 border-b-2 border-transparent transition">
+                            Roles
+                        </a>
+                        <a th:href="@{/permissions}" sec:authorize="hasRole('ADMIN')"
+                           class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 hover:border-primary-600 border-b-2 border-transparent transition">
+                            Permissions
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div sec:authorize="isAuthenticated()" class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-700">
+                            Welcome, <span class="font-medium" sec:authentication="name">User</span>
+                        </span>
+                        <form th:action="@{/auth/logout}" method="post" class="inline">
+                            <button type="submit" class="btn btn-outline text-sm">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/auth/login}" class="btn btn-primary text-sm">
+                            Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success mb-4">
+            <p th:text="${success}"></p>
+        </div>
+        <div th:if="${error}" class="alert alert-error mb-4">
+            <p th:text="${error}"></p>
+        </div>
+        <div th:if="${message}" class="alert alert-info mb-4">
+            <p th:text="${message}"></p>
+        </div>
+
+        <!-- Page Content -->
+        <div th:replace="${content}"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">
+                &copy; 2025 Secure App. All rights reserved.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

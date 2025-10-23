@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/secureapp}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+
+  thymeleaf:
+    cache: true
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+
+logging:
+  level:
+    root: WARN
+    com.example.secureapp: INFO
+    org.springframework.security: WARN
+
+app:
+  security:
+    jwt-secret: ${JWT_SECRET:ChangeThisToAVeryLongRandomStringInProduction}
+  base-url: ${BASE_URL:https://yourdomain.com}

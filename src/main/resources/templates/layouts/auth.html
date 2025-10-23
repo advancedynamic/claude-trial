@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle != null ? pageTitle + ' - Secure App' : 'Secure App'}">Secure App</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-primary-50 to-secondary-100 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md px-4">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-primary-600 mb-2">Secure App</h1>
+            <p class="text-gray-600" th:text="${pageSubtitle ?: 'Secure Authentication System'}"></p>
+        </div>
+
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success mb-4">
+            <p th:text="${success}"></p>
+        </div>
+        <div th:if="${error}" class="alert alert-error mb-4">
+            <p th:text="${error}"></p>
+        </div>
+        <div th:if="${message}" class="alert alert-info mb-4">
+            <p th:text="${message}"></p>
+        </div>
+
+        <!-- Card Content -->
+        <div class="card card-hover">
+            <div th:replace="${content}"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6">
+            <p class="text-sm text-gray-600">
+                &copy; 2025 Secure App. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Permission - Secure App</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+<nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex">
+                <div class="flex-shrink-0 flex items-center">
+                    <a th:href="@{/dashboard}" class="text-2xl font-bold text-primary-600">Secure App</a>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-4">
+                    <a th:href="@{/dashboard}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Dashboard</a>
+                    <a th:href="@{/users}" sec:authorize="hasAnyRole('ADMIN', 'USER_MANAGER')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Users</a>
+                    <a th:href="@{/roles}" sec:authorize="hasRole('ADMIN')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Roles</a>
+                    <a th:href="@{/permissions}" sec:authorize="hasRole('ADMIN')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-primary-600 border-b-2 border-primary-600">Permissions</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-700">Welcome, <span class="font-medium" sec:authentication="name">User</span></span>
+                <form th:action="@{/auth/logout}" method="post" class="inline">
+                    <button type="submit" class="btn btn-outline text-sm">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+        <div class="mb-6">
+            <a th:href="@{/permissions}" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Permissions
+            </a>
+        </div>
+
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Edit Permission</h1>
+
+        <div class="card">
+            <form th:action="@{/permissions/{id}/edit(id=${permission.id})}" th:object="${permission}" method="post">
+                <!-- Name -->
+                <div class="mb-6">
+                    <label for="name" class="form-label">Name <span class="text-error-600">*</span></label>
+                    <input type="text"
+                           id="name"
+                           th:field="*{name}"
+                           class="form-input"
+                           th:classappend="${#fields.hasErrors('name')} ? 'border-error-500' : ''"
+                           placeholder="e.g., READ_USERS, WRITE_USERS, DELETE_USERS"
+                           required>
+                    <p class="mt-1 text-sm text-gray-500">Use uppercase with underscores, e.g., READ_USERS, WRITE_USERS</p>
+                    <p th:if="${#fields.hasErrors('name')}"
+                       th:errors="*{name}"
+                       class="mt-1 text-sm text-error-600"></p>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-6">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description"
+                              th:field="*{description}"
+                              rows="3"
+                              class="form-input"
+                              placeholder="Describe what this permission allows..."></textarea>
+                    <p class="mt-1 text-sm text-gray-500">Provide a clear description of what this permission grants access to</p>
+                    <p th:if="${#fields.hasErrors('description')}"
+                       th:errors="*{description}"
+                       class="mt-1 text-sm text-error-600"></p>
+                </div>
+
+                <!-- Active Checkbox -->
+                <div class="mb-6">
+                    <div class="flex items-center">
+                        <input type="checkbox"
+                               id="active"
+                               th:field="*{active}"
+                               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="active" class="ml-3 block text-sm text-gray-700">
+                            Active
+                        </label>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-500 ml-7">Only active permissions can be assigned to roles</p>
+                </div>
+
+                <!-- Warning if permission is used by roles -->
+                <div th:if="${!#lists.isEmpty(permission.roles)}" class="mb-6 p-4 bg-warning-50 border border-warning-200 rounded-md">
+                    <div class="flex">
+                        <svg class="h-5 w-5 text-warning-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <div>
+                            <h3 class="text-sm font-medium text-warning-800">Warning</h3>
+                            <p class="text-sm text-warning-700 mt-1">
+                                This permission is currently assigned to
+                                <span class="font-medium" th:text="${#lists.size(permission.roles)}">2</span> role(s).
+                                Changes will affect all users with those roles.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Common Permissions Reference -->
+                <div class="mb-6 p-4 bg-gray-50 rounded-md">
+                    <h3 class="text-sm font-medium text-gray-900 mb-2">Common Permission Naming Conventions:</h3>
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <p><strong>CRUD Operations:</strong> READ_*, WRITE_*, UPDATE_*, DELETE_*</p>
+                        <p><strong>Resource Examples:</strong> READ_USERS, WRITE_USERS, UPDATE_USERS, DELETE_USERS</p>
+                        <p><strong>Admin Actions:</strong> MANAGE_ROLES, MANAGE_PERMISSIONS, SYSTEM_CONFIG</p>
+                        <p><strong>Special Actions:</strong> EXPORT_DATA, IMPORT_DATA, VIEW_REPORTS</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-3">
+                    <a th:href="@{/permissions}" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Permission</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>
