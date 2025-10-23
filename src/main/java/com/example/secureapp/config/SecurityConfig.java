@@ -71,7 +71,9 @@ public class SecurityConfig {
                     "/css/**",
                     "/js/**",
                     "/images/**",
-                    "/error"
+                    "/error",
+                    "/actuator/health",
+                    "/actuator/info"
                 ).permitAll()
                 // Admin endpoints
                 .requestMatchers("/admin/**").hasRole("ADMIN")

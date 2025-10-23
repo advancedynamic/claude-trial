@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: secureapp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-secureapp}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-db:/docker-entrypoint-initdb.d
+    networks:
+      - secureapp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MailHog - Email testing tool
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: secureapp-mailhog
+    restart: unless-stopped
+    ports:
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"  # SMTP port
+      - "${MAILHOG_WEB_PORT:-8025}:8025"   # Web UI port
+    networks:
+      - secureapp-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8025"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Spring Boot Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: secureapp
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailhog:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-secureapp}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:8080}
+      APP_SECURITY_JWT_SECRET: ${JWT_SECRET:-YourSuperSecretKeyChangeInProduction}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    networks:
+      - secureapp-network
+    volumes:
+      - app_logs:/app/logs
+
+networks:
+  secureapp-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  app_logs:
+    driver: local

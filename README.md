@@ -69,7 +69,47 @@ A secure, high-performance Spring Boot web application with comprehensive user m
    mvn --version
    ```
 
-## Installation & Setup
+### Docker Alternative
+
+If you prefer to use Docker (recommended for quick setup):
+- **Docker** 20.10+
+- **Docker Compose** 2.0+
+
+See [DOCKER.md](DOCKER.md) for Docker installation and setup instructions.
+
+## Quick Start with Docker (Recommended)
+
+The fastest way to get started:
+
+```bash
+# 1. Clone and navigate to the project
+git clone <repository-url>
+cd secure-app
+
+# 2. Copy environment file
+cp .env.example .env
+
+# 3. Build Tailwind CSS
+npm install && npm run build:css
+
+# 4. Start all services with Docker
+./docker/scripts/start.sh
+```
+
+Access the application at http://localhost:8080
+
+**Default Credentials:**
+- Admin: `admin` / `admin123`
+- User: `user` / `user123`
+
+**Included Services:**
+- Application: http://localhost:8080
+- MailHog (Email UI): http://localhost:8025
+- PostgreSQL: localhost:5432
+
+For detailed Docker instructions, see [DOCKER.md](DOCKER.md)
+
+## Installation & Setup (Without Docker)
 
 ### 1. Clone the Repository
 ```bash

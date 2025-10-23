@@ -1,0 +1,52 @@
+# Git
+.git
+.gitignore
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# Node
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+CONTRIBUTING.md
+LICENSE
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Environment files
+.env
+.env.local
+*.env
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~
