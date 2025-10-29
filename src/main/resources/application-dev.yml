@@ -18,5 +18,5 @@ spring:
 logging:
   level:
     root: INFO
-    com.example.secureapp: DEBUG
+    co.id.abcd.secure: DEBUG
     org.springframework.security: DEBUG

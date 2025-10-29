@@ -54,7 +54,7 @@ server:
 logging:
   level:
     root: INFO
-    com.example.secureapp: INFO
+    co.id.abcd.secure: INFO
     org.springframework.security: WARN
     org.hibernate.SQL: WARN
   file:
