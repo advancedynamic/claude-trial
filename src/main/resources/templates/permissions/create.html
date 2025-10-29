@@ -1,114 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <title>Create Permission - Secure App</title>
-    <link rel="stylesheet" th:href="@{/css/output.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body class="bg-gray-50">
-<nav class="bg-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <div class="flex-shrink-0 flex items-center">
-                    <a th:href="@{/dashboard}" class="text-2xl font-bold text-primary-600">Secure App</a>
-                </div>
-                <div class="hidden sm:ml-6 sm:flex sm:space-x-4">
-                    <a th:href="@{/dashboard}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Dashboard</a>
-                    <a th:href="@{/users}" sec:authorize="hasAnyRole('ADMIN', 'USER_MANAGER')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Users</a>
-                    <a th:href="@{/roles}" sec:authorize="hasRole('ADMIN')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Roles</a>
-                    <a th:href="@{/permissions}" sec:authorize="hasRole('ADMIN')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-primary-600 border-b-2 border-primary-600">Permissions</a>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-700">Welcome, <span class="font-medium" sec:authentication="name">User</span></span>
-                <form th:action="@{/auth/logout}" method="post" class="inline">
-                    <button type="submit" class="btn btn-outline text-sm">Logout</button>
-                </form>
-            </div>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Create Permission - Secure App</title><link rel="stylesheet" th:href="@{/css/output.css}"></head>
+<body class="app-container">
+<aside class="app-sidebar">
+    <div class="sidebar-header"><h1 class="sidebar-brand">Secure App</h1></div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/dashboard}" class="sidebar-item">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            Dashboard
+        </a>
+        <a th:href="@{/users}" sec:authorize="hasAnyRole('ADMIN', 'USER_MANAGER')" class="sidebar-item">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            Users
+        </a>
+        <a th:href="@{/roles}" sec:authorize="hasRole('ADMIN')" class="sidebar-item">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            Roles
+        </a>
+        <a th:href="@{/permissions}" sec:authorize="hasRole('ADMIN')" class="sidebar-item active">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            Permissions
+        </a>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="user-menu">
+            <div class="user-avatar"><span sec:authentication="name" th:text="${#authentication.name.substring(0,2).toUpperCase()}">JD</span></div>
+            <div class="user-info"><div class="user-name" sec:authentication="name">User</div><div class="user-role">Admin</div></div>
         </div>
+        <form th:action="@{/auth/logout}" method="post" class="mt-2">
+            <button type="submit" class="btn btn-secondary w-full btn-sm">Logout</button>
+        </form>
     </div>
-</nav>
-
-<main class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
-    <div class="px-4 py-6 sm:px-0">
-        <div class="mb-6">
-            <a th:href="@{/permissions}" class="text-primary-600 hover:text-primary-700 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-                Back to Permissions
-            </a>
-        </div>
-
-        <h1 class="text-3xl font-bold text-gray-900 mb-6">Create New Permission</h1>
-
-        <div class="card">
-            <form th:action="@{/permissions/create}" th:object="${permission}" method="post">
-                <!-- Name -->
-                <div class="mb-6">
-                    <label for="name" class="form-label">Name <span class="text-error-600">*</span></label>
-                    <input type="text"
-                           id="name"
-                           th:field="*{name}"
-                           class="form-input"
-                           th:classappend="${#fields.hasErrors('name')} ? 'border-error-500' : ''"
-                           placeholder="e.g., READ_USERS, WRITE_USERS, DELETE_USERS"
-                           required>
-                    <p class="mt-1 text-sm text-gray-500">Use uppercase with underscores, e.g., READ_USERS, WRITE_USERS</p>
-                    <p th:if="${#fields.hasErrors('name')}"
-                       th:errors="*{name}"
-                       class="mt-1 text-sm text-error-600"></p>
-                </div>
-
-                <!-- Description -->
-                <div class="mb-6">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea id="description"
-                              th:field="*{description}"
-                              rows="3"
-                              class="form-input"
-                              placeholder="Describe what this permission allows..."></textarea>
-                    <p class="mt-1 text-sm text-gray-500">Provide a clear description of what this permission grants access to</p>
-                    <p th:if="${#fields.hasErrors('description')}"
-                       th:errors="*{description}"
-                       class="mt-1 text-sm text-error-600"></p>
-                </div>
-
-                <!-- Active Checkbox -->
-                <div class="mb-6">
-                    <div class="flex items-center">
-                        <input type="checkbox"
-                               id="active"
-                               th:field="*{active}"
-                               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                        <label for="active" class="ml-3 block text-sm text-gray-700">
-                            Active
-                        </label>
-                    </div>
-                    <p class="mt-1 text-sm text-gray-500 ml-7">Only active permissions can be assigned to roles</p>
-                </div>
-
-                <!-- Common Permissions Reference -->
-                <div class="mb-6 p-4 bg-gray-50 rounded-md">
-                    <h3 class="text-sm font-medium text-gray-900 mb-2">Common Permission Naming Conventions:</h3>
-                    <div class="text-sm text-gray-600 space-y-1">
-                        <p><strong>CRUD Operations:</strong> READ_*, WRITE_*, UPDATE_*, DELETE_*</p>
-                        <p><strong>Resource Examples:</strong> READ_USERS, WRITE_USERS, UPDATE_USERS, DELETE_USERS</p>
-                        <p><strong>Admin Actions:</strong> MANAGE_ROLES, MANAGE_PERMISSIONS, SYSTEM_CONFIG</p>
-                        <p><strong>Special Actions:</strong> EXPORT_DATA, IMPORT_DATA, VIEW_REPORTS</p>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex justify-end gap-3">
-                    <a th:href="@{/permissions}" class="btn btn-outline">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create Permission</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</main>
-</body>
-</html>
+</aside>
+<div class="app-main"><header class="app-header"><h2 class="text-lg font-semibold">Create Permission</h2><a th:href="@{/permissions}" class="btn btn-secondary">Back</a></header>
+<main class="app-content"><div class="page-header"><h1 class="page-title">Create New Permission</h1><p class="page-subtitle">Add a new system permission</p></div>
+<div class="card"><div class="p-6"><form th:action="@{/permissions/create}" th:object="${permission}" method="post">
+<div class="form-group"><label for="name" class="form-label">Permission Name</label><input type="text" id="name" th:field="*{name}" class="form-input" required>
+<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-red-600 text-sm mt-1"></p></div>
+<div class="form-group"><label for="description" class="form-label">Description</label><textarea id="description" th:field="*{description}" class="form-input" rows="3"></textarea></div>
+<div class="mt-8 flex justify-end gap-3"><a th:href="@{/permissions}" class="btn btn-secondary">Cancel</a><button type="submit" class="btn btn-primary">Create Permission</button></div>
+</form></div></div></main></div></body></html>

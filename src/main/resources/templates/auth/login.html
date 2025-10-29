@@ -6,119 +6,84 @@
     <title>Login - Secure App</title>
     <link rel="stylesheet" th:href="@{/css/output.css}">
 </head>
-<body class="bg-gradient-to-br from-gray-50 via-primary-50 to-gray-100 min-h-screen flex items-center justify-center p-4">
-<div class="w-full max-w-md animate-fade-in">
-    <!-- Brand Header -->
-    <div class="text-center mb-8">
-        <h1 class="text-4xl font-display font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">Secure App</h1>
-        <p class="text-gray-600 text-base">Sign in to continue to your account</p>
-    </div>
-
-    <!-- Success Alert -->
-    <div th:if="${success}" class="alert alert-success mb-4 animate-slide-down">
-        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        <div>
-            <h3 class="alert-title">Success</h3>
-            <p th:text="${success}"></p>
+<body class="auth-container">
+    <div class="auth-card">
+        <!-- Header -->
+        <div class="auth-header">
+            <h1 class="auth-logo">Secure App</h1>
+            <h2 class="auth-title">Welcome back</h2>
+            <p class="auth-subtitle">Sign in to continue to your account</p>
         </div>
-    </div>
 
-    <!-- Error Alert -->
-    <div th:if="${error}" class="alert alert-danger mb-4 animate-slide-down">
-        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-        <div>
-            <h3 class="alert-title">Error</h3>
-            <p th:text="${error}"></p>
+        <!-- Alerts -->
+        <div th:if="${success}" class="alert alert-success mb-4">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span th:text="${success}"></span>
         </div>
-    </div>
 
-    <!-- Info Alert -->
-    <div th:if="${message}" class="alert alert-info mb-4 animate-slide-down">
-        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <div>
-            <h3 class="alert-title">Information</h3>
-            <p th:text="${message}"></p>
+        <div th:if="${error}" class="alert alert-danger mb-4">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            <span th:text="${error}"></span>
         </div>
-    </div>
 
-    <!-- Login Card -->
-    <div class="card shadow-xl">
-        <div class="card-body p-8">
-            <h2 class="card-title text-2xl mb-6">Sign In</h2>
+        <div th:if="${message}" class="alert alert-info mb-4">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span th:text="${message}"></span>
+        </div>
 
-            <form th:action="@{/auth/login}" method="post" class="space-y-5">
-                <!-- Username Field -->
-                <div class="form-group">
-                    <label for="username" class="form-label">Username or Email</label>
-                    <input type="text" id="username" name="username" required
-                           class="form-input" placeholder="Enter your username or email"
-                           autocomplete="username">
+        <!-- Login Form -->
+        <form th:action="@{/auth/login}" method="post" class="space-y-4">
+            <div class="form-group">
+                <label for="username" class="form-label">Username or Email</label>
+                <input type="text" id="username" name="username" class="form-input"
+                       placeholder="Enter your username or email" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-input"
+                       placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember-me" name="remember-me" class="form-checkbox">
+                    <label for="remember-me" class="ml-2 text-sm text-gray-700">Remember me</label>
                 </div>
+                <a th:href="@{/auth/forgot-password}" class="auth-link">Forgot password?</a>
+            </div>
 
-                <!-- Password Field -->
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" name="password" required
-                           class="form-input" placeholder="Enter your password"
-                           autocomplete="current-password">
-                </div>
+            <button type="submit" class="btn btn-primary w-full">Sign in</button>
+        </form>
 
-                <!-- Remember Me & Forgot Password -->
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="remember-me" name="remember-me" class="form-checkbox">
-                        <label for="remember-me" class="ml-2 text-sm text-gray-700 cursor-pointer">
-                            Remember me
-                        </label>
-                    </div>
-
-                    <a th:href="@{/auth/forgot-password}" class="link text-sm">
-                        Forgot password?
-                    </a>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-full btn-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                    </svg>
-                    Sign In
-                </button>
-            </form>
-
-            <!-- Divider -->
-            <div class="divider my-6"></div>
-
-            <!-- Magic Link Button -->
-            <a th:href="@{/auth/request-magic-link}" class="btn btn-outline-primary w-full">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-                Sign in with Magic Link
-            </a>
-
-            <!-- Register Link -->
-            <div class="mt-6 text-center">
-                <p class="text-sm text-muted">
-                    Don't have an account?
-                    <a th:href="@{/auth/register}" class="link font-medium">
-                        Create an account
-                    </a>
-                </p>
+        <!-- Divider -->
+        <div class="relative my-6">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-200"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-white text-gray-500">Or</span>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <div class="text-center mt-6">
-        <p class="text-sm text-muted">&copy; 2025 Secure App. All rights reserved.</p>
+        <!-- Magic Link -->
+        <a th:href="@{/auth/request-magic-link}" class="btn btn-secondary w-full">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Sign in with Magic Link
+        </a>
+
+        <!-- Footer -->
+        <div class="auth-footer">
+            Don't have an account? <a th:href="@{/auth/register}" class="auth-link">Create an account</a>
+        </div>
     </div>
-</div>
 </body>
 </html>
