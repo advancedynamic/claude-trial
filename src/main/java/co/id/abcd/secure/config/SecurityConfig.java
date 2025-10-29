@@ -73,7 +73,8 @@ public class SecurityConfig {
                     "/images/**",
                     "/error",
                     "/actuator/health",
-                    "/actuator/info"
+                    "/actuator/info",
+                    "/h2-console/**"
                 ).permitAll()
                 // Admin endpoints
                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -111,6 +112,12 @@ public class SecurityConfig {
             )
             .exceptionHandling(exception -> exception
                 .accessDeniedPage("/error/403")
+            )
+            .headers(headers -> headers
+                .frameOptions(frame -> frame.sameOrigin()) // Allow H2 console frames
+            )
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/h2-console/**") // Disable CSRF for H2 console
             );
 
         return http.build();

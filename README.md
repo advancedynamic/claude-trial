@@ -109,6 +109,43 @@ Access the application at http://localhost:8080
 
 For detailed Docker instructions, see [DOCKER.md](DOCKER.md)
 
+## Quick Start with H2 Database (No PostgreSQL Required)
+
+For local development without Docker or PostgreSQL:
+
+```bash
+# 1. Clone and navigate to the project
+git clone <repository-url>
+cd secure-app
+
+# 2. Build Tailwind CSS
+npm install && npm run build:css
+
+# 3. Run with local profile (H2 database)
+./run-local.sh   # Linux/Mac
+run-local.bat    # Windows
+```
+
+Or manually:
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+**What you get:**
+- H2 file-based database (data persists in `./data/secureapp.mv.db`)
+- H2 Console at http://localhost:8080/h2-console
+- Application at http://localhost:8080
+- MailHog not included (emails logged to console)
+
+**H2 Console Connection:**
+- **JDBC URL:** `jdbc:h2:file:./data/secureapp`
+- **Username:** `sa`
+- **Password:** (leave empty)
+
+**Default Credentials:**
+- Admin: `admin` / `admin123`
+- User: `user` / `user123`
+
 ## Installation & Setup (Without Docker)
 
 ### 1. Clone the Repository

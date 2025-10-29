@@ -53,8 +53,10 @@ package-lock.json
 # src/main/resources/static/css/output.css
 
 # Application specific
-application-local.yml
 *.env
 
 # H2 Database
 *.db
+*.mv.db
+*.trace.db
+data/
