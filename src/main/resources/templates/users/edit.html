@@ -2,39 +2,79 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User - Secure App</title>
     <link rel="stylesheet" th:href="@{/css/output.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
-<nav class="bg-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <div class="flex-shrink-0 flex items-center">
-                    <a th:href="@{/dashboard}" class="text-2xl font-bold text-primary-600">Secure App</a>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="navbar shadow-md">
+        <div class="navbar-container">
+            <div class="navbar-content">
+                <!-- Brand Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a th:href="@{/dashboard}" class="text-2xl font-display font-bold bg-gradient-primary bg-clip-text text-transparent">
+                            Secure App
+                        </a>
+                    </div>
+                    <!-- Main Navigation -->
+                    <div class="navbar-menu">
+                        <a th:href="@{/dashboard}" class="navbar-item">
+                            <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a th:href="@{/users}" sec:authorize="hasAnyRole('ADMIN', 'USER_MANAGER')" class="navbar-item text-primary-600 border-b-2 border-primary-600 font-medium">
+                            <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            Users
+                        </a>
+                        <a th:href="@{/roles}" sec:authorize="hasRole('ADMIN')" class="navbar-item">
+                            <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            Roles
+                        </a>
+                        <a th:href="@{/permissions}" sec:authorize="hasRole('ADMIN')" class="navbar-item">
+                            <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            Permissions
+                        </a>
+                    </div>
                 </div>
-                <div class="hidden sm:ml-6 sm:flex sm:space-x-4">
-                    <a th:href="@{/dashboard}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Dashboard</a>
-                    <a th:href="@{/users}" sec:authorize="hasAnyRole('ADMIN', 'USER_MANAGER')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-primary-600 border-b-2 border-primary-600">Users</a>
-                    <a th:href="@{/roles}" sec:authorize="hasRole('ADMIN')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Roles</a>
-                    <a th:href="@{/permissions}" sec:authorize="hasRole('ADMIN')" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 border-b-2 border-transparent">Permissions</a>
+
+                <!-- User Menu -->
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg">
+                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        <span class="text-sm text-gray-700">
+                            <span class="font-medium" sec:authentication="name">User</span>
+                        </span>
+                    </div>
+                    <form th:action="@{/auth/logout}" method="post" class="inline">
+                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            Logout
+                        </button>
+                    </form>
                 </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-700">Welcome, <span class="font-medium" sec:authentication="name">User</span></span>
-                <form th:action="@{/auth/logout}" method="post" class="inline">
-                    <button type="submit" class="btn btn-outline text-sm">Logout</button>
-                </form>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<main class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
-    <div class="px-4 py-6 sm:px-0">
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <!-- Back Link -->
         <div class="mb-6">
-            <a th:href="@{/users}" class="text-primary-600 hover:text-primary-700 flex items-center">
+            <a th:href="@{/users}" class="inline-flex items-center text-primary-600 hover:text-primary-700">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
@@ -42,128 +82,143 @@
             </a>
         </div>
 
-        <h1 class="text-3xl font-bold text-gray-900 mb-6">Edit User</h1>
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="section-title">Edit User</h1>
+            <p class="section-subtitle">Update user information and settings</p>
+        </div>
 
-        <div class="card">
-            <form th:action="@{/users/{id}/edit(id=${user.id})}" th:object="${user}" method="post">
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    <!-- Username -->
-                    <div>
-                        <label for="username" class="form-label">Username <span class="text-error-600">*</span></label>
-                        <input type="text"
-                               id="username"
-                               th:field="*{username}"
-                               class="form-input"
-                               th:classappend="${#fields.hasErrors('username')} ? 'border-error-500' : ''"
-                               required>
-                        <p th:if="${#fields.hasErrors('username')}"
-                           th:errors="*{username}"
-                           class="mt-1 text-sm text-error-600"></p>
+        <!-- Form Card -->
+        <div class="card shadow-xl">
+            <div class="card-body p-8">
+                <form th:action="@{/users/{id}/edit(id=${user.id})}" th:object="${user}" method="post">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <!-- Username -->
+                        <div class="form-group">
+                            <label for="username" class="form-label form-label-required">Username</label>
+                            <input type="text"
+                                   id="username"
+                                   th:field="*{username}"
+                                   class="form-input"
+                                   th:classappend="${#fields.hasErrors('username')} ? 'border-error-500' : ''"
+                                   required>
+                            <p th:if="${#fields.hasErrors('username')}"
+                               th:errors="*{username}"
+                               class="form-error"></p>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="email" class="form-label form-label-required">Email</label>
+                            <input type="email"
+                                   id="email"
+                                   th:field="*{email}"
+                                   class="form-input"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'border-error-500' : ''"
+                                   required>
+                            <p th:if="${#fields.hasErrors('email')}"
+                               th:errors="*{email}"
+                               class="form-error"></p>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group sm:col-span-2">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password"
+                                   id="password"
+                                   th:field="*{password}"
+                                   class="form-input"
+                                   th:classappend="${#fields.hasErrors('password')} ? 'border-error-500' : ''"
+                                   placeholder="Enter new password or leave blank">
+                            <p th:if="${#fields.hasErrors('password')}"
+                               th:errors="*{password}"
+                               class="form-error"></p>
+                            <p class="form-help">Leave blank to keep current password</p>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel"
+                                   id="phone"
+                                   th:field="*{phone}"
+                                   class="form-input"
+                                   placeholder="+1234567890">
+                        </div>
+
+                        <!-- First Name -->
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text"
+                                   id="firstName"
+                                   th:field="*{firstName}"
+                                   class="form-input">
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text"
+                                   id="lastName"
+                                   th:field="*{lastName}"
+                                   class="form-input">
+                        </div>
                     </div>
 
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="form-label">Email <span class="text-error-600">*</span></label>
-                        <input type="email"
-                               id="email"
-                               th:field="*{email}"
-                               class="form-input"
-                               th:classappend="${#fields.hasErrors('email')} ? 'border-error-500' : ''"
-                               required>
-                        <p th:if="${#fields.hasErrors('email')}"
-                           th:errors="*{email}"
-                           class="mt-1 text-sm text-error-600"></p>
+                    <!-- Roles Section -->
+                    <div class="form-group mt-6">
+                        <label class="form-label">Roles</label>
+                        <div class="mt-2 space-y-2">
+                            <div th:each="role : ${allRoles}" class="flex items-center">
+                                <input type="checkbox"
+                                       th:id="'role-' + ${role.id}"
+                                       name="roleIds"
+                                       th:value="${role.id}"
+                                       th:checked="${userRoleIds.contains(role.id)}"
+                                       class="form-checkbox">
+                                <label th:for="'role-' + ${role.id}" class="ml-3 block text-sm text-gray-700">
+                                    <span th:text="${role.name}" class="font-medium">ADMIN</span>
+                                    <span th:if="${role.description}" th:text="' - ' + ${role.description}" class="text-muted"></span>
+                                </label>
+                            </div>
+                            <p th:if="${#lists.isEmpty(allRoles)}" class="text-sm text-muted">
+                                No roles available. Please create roles first.
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Password -->
-                    <div class="sm:col-span-2">
-                        <label for="password" class="form-label">
-                            Password
-                            <span class="text-gray-500 text-sm font-normal">(leave blank to keep current password)</span>
-                        </label>
-                        <input type="password"
-                               id="password"
-                               th:field="*{password}"
-                               class="form-input"
-                               th:classappend="${#fields.hasErrors('password')} ? 'border-error-500' : ''"
-                               placeholder="Enter new password or leave blank">
-                        <p th:if="${#fields.hasErrors('password')}"
-                           th:errors="*{password}"
-                           class="mt-1 text-sm text-error-600"></p>
-                    </div>
-
-                    <!-- Phone -->
-                    <div>
-                        <label for="phone" class="form-label">Phone</label>
-                        <input type="tel"
-                               id="phone"
-                               th:field="*{phone}"
-                               class="form-input"
-                               placeholder="+1234567890">
-                    </div>
-
-                    <!-- First Name -->
-                    <div>
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text"
-                               id="firstName"
-                               th:field="*{firstName}"
-                               class="form-input">
-                    </div>
-
-                    <!-- Last Name -->
-                    <div>
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text"
-                               id="lastName"
-                               th:field="*{lastName}"
-                               class="form-input">
-                    </div>
-                </div>
-
-                <!-- Roles Section -->
-                <div class="mt-6">
-                    <label class="form-label">Roles</label>
-                    <div class="mt-2 space-y-2">
-                        <div th:each="role : ${allRoles}" class="flex items-center">
+                    <!-- Account Status -->
+                    <div class="form-group mt-6">
+                        <div class="flex items-center">
                             <input type="checkbox"
-                                   th:id="'role-' + ${role.id}"
-                                   name="roleIds"
-                                   th:value="${role.id}"
-                                   th:checked="${userRoleIds.contains(role.id)}"
-                                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                            <label th:for="'role-' + ${role.id}" class="ml-3 block text-sm text-gray-700">
-                                <span th:text="${role.name}" class="font-medium">ADMIN</span>
-                                <span th:if="${role.description}" th:text="' - ' + ${role.description}" class="text-gray-500"></span>
+                                   id="enabled"
+                                   th:field="*{enabled}"
+                                   class="form-checkbox">
+                            <label for="enabled" class="ml-3 block text-sm text-gray-700">
+                                Account Enabled
                             </label>
                         </div>
-                        <p th:if="${#lists.isEmpty(allRoles)}" class="text-sm text-gray-500">
-                            No roles available. Please create roles first.
-                        </p>
+                        <p class="form-help ml-7">Disable to prevent user from logging in</p>
                     </div>
-                </div>
 
-                <!-- Account Status -->
-                <div class="mt-6">
-                    <div class="flex items-center">
-                        <input type="checkbox"
-                               id="enabled"
-                               th:field="*{enabled}"
-                               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                        <label for="enabled" class="ml-3 block text-sm text-gray-700">
-                            Account Enabled
-                        </label>
+                    <!-- Action Buttons -->
+                    <div class="mt-8 flex justify-end gap-3">
+                        <a th:href="@{/users}" class="btn btn-outline btn-lg">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Update User
+                        </button>
                     </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="mt-6 flex justify-end gap-3">
-                    <a th:href="@{/users}" class="btn btn-outline">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Update User</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 </body>
 </html>
