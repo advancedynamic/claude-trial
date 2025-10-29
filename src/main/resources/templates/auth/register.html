@@ -5,87 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Secure App</title>
     <link rel="stylesheet" th:href="@{/css/output.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-primary-50 to-secondary-100 min-h-screen flex items-center justify-center">
-<div class="w-full max-w-md px-4">
+<body class="bg-gradient-to-br from-gray-50 via-primary-50 to-gray-100 min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-2xl animate-fade-in">
+    <!-- Brand Header -->
     <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-primary-600 mb-2">Secure App</h1>
-        <p class="text-gray-600">Create your account</p>
+        <h1 class="text-4xl font-display font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">Secure App</h1>
+        <p class="text-gray-600 text-base">Create your account to get started</p>
     </div>
 
-    <div th:if="${success}" class="alert alert-success mb-4">
-        <p th:text="${success}"></p>
-    </div>
-
-    <div class="card card-hover">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Register</h2>
-
-        <form th:action="@{/auth/register}" th:object="${user}" method="post" class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label for="firstName" class="form-label">First Name</label>
-                    <input type="text" id="firstName" th:field="*{firstName}"
-                           class="form-input" placeholder="John">
-                </div>
-                <div>
-                    <label for="lastName" class="form-label">Last Name</label>
-                    <input type="text" id="lastName" th:field="*{lastName}"
-                           class="form-input" placeholder="Doe">
-                </div>
-            </div>
-
-            <div>
-                <label for="username" class="form-label">Username *</label>
-                <input type="text" id="username" th:field="*{username}" required
-                       class="form-input" placeholder="johndoe">
-                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="form-error"></p>
-            </div>
-
-            <div>
-                <label for="email" class="form-label">Email *</label>
-                <input type="email" id="email" th:field="*{email}" required
-                       class="form-input" placeholder="john@example.com">
-                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="form-error"></p>
-            </div>
-
-            <div>
-                <label for="phone" class="form-label">Phone</label>
-                <input type="tel" id="phone" th:field="*{phone}"
-                       class="form-input" placeholder="+1234567890">
-            </div>
-
-            <div>
-                <label for="password" class="form-label">Password *</label>
-                <input type="password" id="password" th:field="*{password}" required
-                       class="form-input" placeholder="Minimum 8 characters">
-                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="form-error"></p>
-            </div>
-
-            <div>
-                <label for="confirmPassword" class="form-label">Confirm Password *</label>
-                <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required
-                       class="form-input" placeholder="Re-enter password">
-                <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="form-error"></p>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-full">
-                Create Account
-            </button>
-        </form>
-
-        <div class="mt-6 text-center">
-            <p class="text-sm text-gray-600">
-                Already have an account?
-                <a th:href="@{/auth/login}" class="font-medium text-primary-600 hover:text-primary-500">
-                    Sign in here
-                </a>
-            </p>
+    <!-- Success Alert -->
+    <div th:if="${success}" class="alert alert-success mb-4 animate-slide-down">
+        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <div>
+            <h3 class="alert-title">Success</h3>
+            <p th:text="${success}"></p>
         </div>
     </div>
 
+    <!-- Register Card -->
+    <div class="card shadow-xl">
+        <div class="card-body p-8">
+            <h2 class="card-title text-2xl mb-6">Create Account</h2>
+
+            <form th:action="@{/auth/register}" th:object="${user}" method="post" class="space-y-5">
+                <!-- Name Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" id="firstName" th:field="*{firstName}"
+                               class="form-input" placeholder="John" autocomplete="given-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" id="lastName" th:field="*{lastName}"
+                               class="form-input" placeholder="Doe" autocomplete="family-name">
+                    </div>
+                </div>
+
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label for="username" class="form-label form-label-required">Username</label>
+                    <input type="text" id="username" th:field="*{username}" required
+                           class="form-input" placeholder="johndoe" autocomplete="username">
+                    <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="form-error"></p>
+                    <p class="form-help">Choose a unique username for your account</p>
+                </div>
+
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email" class="form-label form-label-required">Email</label>
+                    <input type="email" id="email" th:field="*{email}" required
+                           class="form-input" placeholder="john@example.com" autocomplete="email">
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="form-error"></p>
+                    <p class="form-help">We'll send verification emails to this address</p>
+                </div>
+
+                <!-- Phone Field -->
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" id="phone" th:field="*{phone}"
+                           class="form-input" placeholder="+1 (555) 123-4567" autocomplete="tel">
+                    <p class="form-help">Optional: For account recovery</p>
+                </div>
+
+                <!-- Password Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="password" class="form-label form-label-required">Password</label>
+                        <input type="password" id="password" th:field="*{password}" required
+                               class="form-input" placeholder="Minimum 8 characters" autocomplete="new-password">
+                        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="form-error"></p>
+                        <p class="form-help">At least 8 characters</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label form-label-required">Confirm Password</label>
+                        <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required
+                               class="form-input" placeholder="Re-enter password" autocomplete="new-password">
+                        <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="form-error"></p>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-full btn-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                    </svg>
+                    Create Account
+                </button>
+            </form>
+
+            <!-- Sign In Link -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-muted">
+                    Already have an account?
+                    <a th:href="@{/auth/login}" class="link font-medium">
+                        Sign in here
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <div class="text-center mt-6">
-        <p class="text-sm text-gray-600">&copy; 2025 Secure App. All rights reserved.</p>
+        <p class="text-sm text-muted">&copy; 2025 Secure App. All rights reserved.</p>
     </div>
 </div>
 </body>
